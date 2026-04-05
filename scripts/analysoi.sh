@@ -4,6 +4,7 @@ find . -type f -name "*.py" | grep -q . && echo "- Python" >> analysis_report.tx
 find . -type f -name "*.java" | grep -q . && echo "- Java" >> analysis_report.txt
 find . -type f -name "*.js" | grep -q . && echo "- JavaScript" >> analysis_report.txt
 find . -type f -name "*.ts" | grep -q . && echo "- TypeScript" >> analysis_report.txt
+find . -type f -name "*.sh" | grep -q . && echo "- Shell" >> analysis_report.txt
 echo "" >> analysis_report.txt
 echo "Design patterns detected:" >> analysis_report.txt
 
