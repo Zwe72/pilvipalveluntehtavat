@@ -13,8 +13,8 @@ jobs:
 
       - name: Run analysis script
         run: |
-          chmod +x analysoi.sh
-          ./analysoi.sh
+          chmod +x scripts/analysoi.sh
+          ./scripts/analysoi.sh
 
       - name: Show report in logs
         run: cat analysis_report.txt
