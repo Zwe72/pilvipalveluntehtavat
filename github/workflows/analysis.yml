@@ -16,6 +16,9 @@ jobs:
           chmod +x analysoi.sh
           ./analysoi.sh
 
+      - name: Show report in logs
+        run: cat analysis_report.txt
+
       - name: Upload analysis report
         uses: actions/upload-artifact@v4
         with:
