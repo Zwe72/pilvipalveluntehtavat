@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import LoginForm from './LoginForm';
+import { auth, logout } from './authService';
 
 function App() {
   const [codename, setCodename] = useState<string>("");
-
+  const [user, setUser] = useState<User | null>(null);
+  
+  
   function generateCodename(): string {
   const adjectives = ["Sneaky", "Electric", "Silent", "Hyper", "Cosmic"];
   const animals = ["Fox", "Panda", "Lizard", "Dragon", "Hawk"];
@@ -15,6 +20,14 @@ function App() {
   return `${adj}${animal}${number}`;
   }
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    
+    return () => unsubscribe();
+  }, []);
+  
   useEffect(() => {
     const cachedName = localStorage.getItem("codename");
 
@@ -41,9 +54,16 @@ function App() {
       }}>
         Arvo uusi koodinimi
       </button>
-
+      {user ? (
+        <>
+          <p>👋 Tervetuloa, {user.email}</p>
+          <button onClick={logout}>Kirjaudu ulos</button>
+        </>
+      ) : (
+        <LoginForm />
+      )}
     </div>
   )
 }
 
-export default App
+export default App;
