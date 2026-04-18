@@ -1,4 +1,4 @@
-import { cache, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import LoginForm from './LoginForm';
