@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { loginWithEmail } from "./authService";
+import { loginWithEmail, registerWithEmail } from "./authService";
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -24,13 +24,30 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+  const handleRegister = async () => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      await registerWithEmail(email, password);
+    } catch (err: unknown) {
+      if (err instanceof Error)  {
+        setError(err.message);
+      } else {
+        setError("Rekisteröinti epäonnistui");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   
   return (
     <form onSubmit={handleSubmit}>
       <h2>Kirjaudu sisään</h2>
 
       <div>
-        <label>Sähköposti</label>
+        <label>Sähköposti: </label>
         <input
           type="email"
           value={email}
@@ -40,7 +57,7 @@ const LoginForm = () => {
       </div>
 
       <div>
-        <label>Salasana</label>
+        <label>Salasana: </label>
         <input
           type="password"
           value={password}
@@ -53,6 +70,15 @@ const LoginForm = () => {
 
       <button type="submit" disabled={loading}>
         {loading ? "Kirjaudutaan..." : "Kirjaudu"}
+      </button>
+
+      <button
+      type="button"
+      onClick={handleRegister}
+      disabled={loading}
+      style={{ marginLeft: "10px" }}
+      >
+        Luo käyttäjä
       </button>
     </form>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { cache, useEffect, useState } from 'react'
 import './App.css'
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import LoginForm from './LoginForm';
@@ -27,43 +27,49 @@ function App() {
     
     return () => unsubscribe();
   }, []);
-  
+
   useEffect(() => {
-    const cachedName = localStorage.getItem("codename");
+    if (!user) return;
+
+    const key = `codename_${user.uid}`;
+    const cachedName = localStorage.getItem(key);
 
     if (cachedName) {
       setCodename(cachedName);
     } else {
       const newName = generateCodename();
-      localStorage.setItem("codename", newName);
+      localStorage.setItem(key, newName);
       setCodename(newName);
     }
-  }, []);
+  }, [user]);
 
   return (
-    <div>
-      <h1>Tervetuloa FunnyCodeName!</h1>
-      <p>Koodinimesi on: <strong>{codename}</strong></p>
+  <div>
+    <h1>Tervetuloa FunnyCodeName!</h1>
 
-      <button 
-        style={{marginTop: "10px"}}
-        onClick={() => {
-        const newName = generateCodename();
-        localStorage.setItem("codename", newName);
-        setCodename(newName);
-      }}>
-        Arvo uusi koodinimi
-      </button>
-      {user ? (
-        <>
-          <p>👋 Tervetuloa, {user.email}</p>
-          <button onClick={logout}>Kirjaudu ulos</button>
-        </>
-      ) : (
-        <LoginForm />
-      )}
-    </div>
-  )
+    {user ? (
+      <>
+        <p>👋 Tervetuloa, {codename}</p>
+
+        <button
+          style={{ marginTop: "10px" }}
+          onClick={() => {
+            const key = `codename_${user.uid}`;
+            const newName = generateCodename();
+            localStorage.setItem(key, newName);
+            setCodename(newName);
+          }}
+        >
+          Arvo uusi koodinimi
+        </button>
+
+        <button onClick={logout}>Kirjaudu ulos</button>
+      </>
+    ) : (
+      <LoginForm />
+    )}
+  </div>
+);
 }
 
 export default App;
