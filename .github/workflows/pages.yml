@@ -30,7 +30,7 @@ jobs:
           cache-dependency-path: vko3/funnycodename/package-lock.json
 
       - name: Install funnycodename dependencies
-        run: npm ci
+        run: npm install
         working-directory: vko3/funnycodename
 
       - name: Build funnycodename
