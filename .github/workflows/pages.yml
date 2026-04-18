@@ -1,0 +1,66 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vko3/funnycodename/package-lock.json
+
+      - name: Install funnycodename dependencies
+        run: npm ci
+        working-directory: vko3/funnycodename
+
+      - name: Build funnycodename
+        run: npm run build
+        working-directory: vko3/funnycodename
+
+      - name: Assemble Pages site
+        shell: bash
+        run: |
+          mkdir -p site/vko3/funnycodename
+          cp index.html site/index.html
+          cp styles.css site/styles.css
+          cp -r vko3/funnycodename/dist/* site/vko3/funnycodename/
+          touch site/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
