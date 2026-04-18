@@ -1,0 +1,27 @@
+name: Repository Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run analysis script
+        run: |
+          chmod +x scripts/analysoi.sh
+          ./scripts/analysoi.sh
+
+      - name: Show report in logs
+        run: cat analysis_report.txt
+
+      - name: Upload analysis report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-report
+          path: analysis_report.txt
