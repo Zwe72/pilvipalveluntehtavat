@@ -23,39 +23,41 @@ function App() {
   const sessionId = "pWQ8TndPALsYnoIIPahC";
 
   useEffect(() => {
-    createSession(sessionId);
-    
-    const unsubscribeSession = subscribeSession(sessionId, (data) => {
-      console.log("🔥 FIRESTORE DATA:", data);
-
-      if (!data) {
-      console.error("❌ Session document ei löydy!");
-      return;
-    }
-    setSession(data);
-    });
-
-
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       setLoadingUser(false);
 
-      if (firebaseUser) {
-        const name = firebaseUser.email ?? "Player";
-        setCodename(name);
+      if (!firebaseUser) return;
+        
+      const name = firebaseUser.email ?? "Player";
+      setCodename(name);
 
-        await joinSession(sessionId, {
-          uid: firebaseUser.uid,
-          codename: name,
-          score: 0,
-          guess: null
-        });
+      await joinSession(sessionId, {
+      uid: firebaseUser.uid,
+      codename: name,
+      score: 0,
+      guess: null
+    });
+    
+      await createSession(sessionId);
+
+      const unsubscribeSession = subscribeSession(sessionId, (data) => {
+      console.log("🔥 FIRESTORE DATA:", data);
+
+      if (!data) {
+        console.error("❌ Session document ei löydy!");
+        return;
       }
+      setSession(data);
+    });
+
+    return () => {
+      unsubscribeSession?.();
+    };
     });
 
     return () => {
       unsubscribeAuth();
-      unsubscribeSession();
     };   
   }, []);
 
