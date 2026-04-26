@@ -8,7 +8,7 @@ import { onAuthStateChanged, type User } from 'firebase/auth';
 import { RoundResult } from './components/RoundResult';
 import { QuizForm } from './components/QuizForm';
 
-import { subscribeSession, updateSession, updatePlayerGuess, joinSession} from './services/gameSessionService';
+import { subscribeSession, updatePlayerGuess, joinSession} from './services/gameSessionService';
 import { type Session } from './types/Session';
 
 import { createSession } from './services/gameSessionService';
