@@ -18,7 +18,8 @@ function App() {
 
   // Initialize count from localStorage on mount
   useEffect(() => {
-    const sessionId = "vWEbPh6LQVhsm329Rz2h";
+    const sessionId = "pWQ8TndPALsYnoIIPahC";
+    console.log("🧠 USING SESSION ID:", sessionId);
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
@@ -30,6 +31,7 @@ function App() {
     });
 
     const unsubscribeSession = subscribeSession(sessionId, (data) => {
+      console.log("🔥 APP SAI DATAA:", data);
       setSession(data);
     });
 
@@ -40,11 +42,15 @@ function App() {
   }, []);
 
   useEffect(() => {
+  console.log("🧠 SESSION STATE:", session);
+  }, [session]);
+
+  useEffect(() => {
     if (!session || !user) return;
 
     const players = session.players ?? [];
 
-    const exists = session.players.some(p => p.uid === user.uid);
+    const exists = players.some(p => p.uid === user.uid);
 
     if (!exists && players.length < 4) {
       const newPlayer = {
@@ -63,6 +69,8 @@ function App() {
   async function submitGuess(guess: number) {
     if (!session || !user) return;
     
+    if (!session.currentProduct) return;
+
     const players = session.players ?? [];
 
     const updatedPlayers = players.map(p =>
@@ -98,7 +106,7 @@ function App() {
         />
       )}
 
-      {session.status === "finished" && session?.correctPrice !== null && (
+      {session.status === "finished" && session.correctPrice != null && (
         <RoundResult
         players={session.players}
         correctPrice={session.correctPrice}

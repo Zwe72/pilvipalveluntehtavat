@@ -4,16 +4,26 @@ import type { Session } from "../types/Session";
 
 export function subscribeSession(
   sessionId: string,
-  callback: (data: any) => void
+  callback: (data: Session | null) => void
 ) {
   const ref = doc(db, "sessions", sessionId);
 
   return onSnapshot(ref, (snap) => {
-    if (!snap.exists()) return;
+    console.log("🔥 SNAP EXISTS:", snap.exists());
+
+    if (!snap.exists()) {
+        console.log("❌ SESSION EI LÖYDY:", sessionId);
+        callback(null);
+        return;
+    }
+
+    const data = snap.data();
+    
+    console.log("SESSION UPDATE:", data);
 
     callback({
-      id: snap.id,
-      ...snap.data()
+      ...(data as Session),
+      id: snap.id
     });
   });
 }
