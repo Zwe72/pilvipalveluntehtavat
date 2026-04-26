@@ -23,12 +23,8 @@ function App() {
   const sessionId = "pWQ8TndPALsYnoIIPahC";
 
   useEffect(() => {
-    const init = async () => {
-    await createSession(sessionId);
-    };
-
-    init();
-
+    createSession(sessionId);
+    
     const unsubscribeSession = subscribeSession(sessionId, (data) => {
       console.log("🔥 FIRESTORE DATA:", data);
 
@@ -36,7 +32,6 @@ function App() {
       console.error("❌ Session document ei löydy!");
       return;
     }
-
     setSession(data);
     });
 

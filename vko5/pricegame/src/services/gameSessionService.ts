@@ -1,4 +1,4 @@
-import { doc, onSnapshot, runTransaction, updateDoc, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, runTransaction, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import type { Session } from "../types/Session";
 
@@ -30,14 +30,20 @@ export function subscribeSession(
 
 export async function createSession(sessionId: string) {
   const ref = doc(db, "sessions", sessionId);
-
+  const snap = await getDoc(ref);
+  
+  if (!snap.exists()) {
   await setDoc(ref, {
     status: "waiting",
     players: [],
     currentProduct: null,
     correctPrice: null,
-    round: 0
-  });
+    round: 0,
+    sessionName: "Default",
+    createdAt: Date.now(),
+    createdBy: "system"
+    });
+  }
 }
 
 export async function updateSession(
@@ -77,9 +83,9 @@ export async function updatePlayerGuess(
         guess: p.uid === userId ? guess : (p.guess ?? null)
     }));
 
-    const allGuessed = updatedPlayers.every(
-        (p: any) => typeof p.guess === "number"
-    );
+    const allGuessed = 
+    updatedPlayers.length >= 2 &&
+    updatedPlayers.every((p: any) => typeof p.guess === "number");
 
     console.log("UPDATED PLAYERS:", updatedPlayers);
     console.log("ALL GUESSED:", allGuessed);

@@ -21,6 +21,7 @@ export async function startGame(session: Session) {
 }
 
 export async function nextRound(session: Session) {
+  const newRound = (session.round ?? 0) + 1;
   const nextIndex = (session.round ?? 0) % PRODUCTS.length;
   const product = PRODUCTS[nextIndex];
 
@@ -28,7 +29,7 @@ export async function nextRound(session: Session) {
     status: "playing",
     currentProduct: product,
     correctPrice: null,
-    round: (session.round ?? 0) + 1,
+    round: newRound,
     players: session.players.map(p => ({
       ...p,
       guess: null
