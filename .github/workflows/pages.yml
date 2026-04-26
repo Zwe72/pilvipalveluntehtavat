@@ -43,6 +43,20 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
 
+      - name: Install pricegame dependencies
+        run: npm install
+        working-directory: vko5/pricegame 
+
+      - name: Build pricegame
+        run: npm run build
+        working-directory: vko5/pricegame
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+
       - name: Assemble Pages site
         shell: bash
         run: |
@@ -50,6 +64,8 @@ jobs:
           cp index.html site/index.html
           cp styles.css site/styles.css
           cp -r vko3/funnycodename/dist/* site/vko3/funnycodename/
+          mkdir -p site/vko5/pricegame
+          cp -r vko5/pricegame/dist/* site/vko5/pricegame/
           touch site/.nojekyll
 
       - name: Setup Pages
