@@ -10,9 +10,9 @@ export type Session = {
     sessionName: string;
     status: "waiting" | "playing" | "finished";
     players: Player[];
-    currentRound: number;
     currentProduct: Product | null;
     correctPrice: number | null;
     createdAt: number;
     createdBy: string;
+    round: number;
 }

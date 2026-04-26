@@ -7,6 +7,14 @@ export function RoundResult({
   players: Player[];
   correctPrice: number;
 }) {
+
+    const SortedPlayers = [...players]
+        .filter(p => p.guess !== null)
+        .sort((a, b) =>
+         Math.abs(a.guess! - correctPrice) - Math.abs(b.guess! - correctPrice)
+    );
+    
+    const winnerUid = SortedPlayers[0]?.uid;
   return (
     <div>
       <h3>Kierroksen tulos</h3>
@@ -14,14 +22,21 @@ export function RoundResult({
       <p>Oikea hinta: {correctPrice} €</p>
 
       <ul>
-        {players.map(p => (
-          <li key={p.uid}>
+        {players.map(p => {
+            const isWinner = p.uid === winnerUid;
+
+            return (
+          <li key={p.uid}
+          style={{fontWeight: isWinner ? "bold" : "normal" }}
+          >
+            {isWinner && "🏆 "}
             {p.codename}: {p.guess ?? "-"} €
             {p.guess !== null
               ? ` (ero ${Math.abs(p.guess - correctPrice)} €)`
-              : " (ei arvannut)"}
+              : " (ei arvausta)"}
           </li>
-        ))}
+        );
+        })}
       </ul>
     </div>
   );

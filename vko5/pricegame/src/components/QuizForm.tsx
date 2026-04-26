@@ -8,13 +8,25 @@ interface QuizFormProps {
     onSubmitGuess: (guess: number) => void;
 }
 
-export function QuizForm({ onSubmitGuess, productName }: QuizFormProps) {
-  const [guess, setGuess] = useState("");
+export function QuizForm({ 
+  players, 
+  currentUserId, 
+  onSubmitGuess, 
+  productName 
+}: QuizFormProps) {
+
+    const [guess, setGuess] = useState("");
+
+    const currentPlayer = players.find(p => p.uid === currentUserId);
+    const hasGuessed = currentPlayer?.guess != null;
 
   return (
     <>
       <p>Arvattavan tuotteen nimi: {productName}</p>
 
+      {hasGuessed ? (
+        <p>Olet jo arvannut: {currentPlayer?.guess} €</p>
+      ) : (
       <form onSubmit={e => {
           e.preventDefault();
           onSubmitGuess(Number(guess));
@@ -29,6 +41,7 @@ export function QuizForm({ onSubmitGuess, productName }: QuizFormProps) {
         />
         <button>Arvaa hinta</button>
       </form>
+      )}
     </>
   );
 }
