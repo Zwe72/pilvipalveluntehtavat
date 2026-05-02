@@ -14,7 +14,10 @@ import { type Session } from './types/Session';
 import { createSession } from './services/gameSessionService';
 import { startGame, nextRound } from './gameController';
 
+import ConsentBanner from "./components/ConsentBanner";
+
 function App() {
+  
   const [session, setSession] = useState<Session | null>(null);
   const [codename, setCodename] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
@@ -69,6 +72,23 @@ function App() {
     }
   }, [session]);
 
+  useEffect(() => {
+    const consent = localStorage.getItem("consent");
+
+    if (consent === "true") {
+      if (!document.querySelector('script[src*="cloudflareinsights"]')) {
+        const script = document.createElement("script");
+        script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        script.defer = true;
+        script.setAttribute(
+          "data-cf-beacon",
+          '{"token": "a2eaacc5bb1d4cf48e0a8bbfec5e339e"}'
+        );
+        document.body.appendChild(script);
+      }
+    }
+  }, []);
+
   async function submitGuess(guess: number) {
     if (!session || !user) return;
     if (!session.currentProduct) return;
@@ -92,6 +112,8 @@ function App() {
 
   return (
     <div>
+      <ConsentBanner />
+
       <p>👋 Tervetuloa, {codename}</p>
       <button onClick={logout}>Kirjaudu ulos</button>
 
