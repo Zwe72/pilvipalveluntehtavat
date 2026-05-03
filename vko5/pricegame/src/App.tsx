@@ -104,36 +104,49 @@ function App() {
   if (!session) return;
   await nextRound(session);
   }
-  
+    if (showAnalyticsInfo) {
+      return (
+        <div>
+          <button onClick={() => setShowAnalyticsInfo(false)}>
+            Takaisin
+          </button>
+
+          <h2>Analytiikan hyödyntäminen</h2>
+
+          <p>
+          Web-analytiikkaa voidaan käyttää sovelluksen käytön seurantaan ja parantamiseen. 
+          Se kertoo, kuinka paljon käyttäjää vierailee sovelluksessa, mitä ominaisuuksia he käyttävät 
+          ja kuinka kauan he viipyvät sivulla. Näiden tietojen perusteella voidaan parantaa 
+          käyttökokemusta ja tunnistaa ongelmia.
+
+          CORS-ongelma ilmenee, kun selain estää eri domainien väliset pyynnöt turvallisuussyistä. 
+          Tämä voidaan välttää käyttämällä samaa domainia tai sallimalla pyynnöt palvelimen 
+          asetuksissa (Access-Control-Allow-Origin).
+          </p>
+        </div>
+      );
+    }
+
     if (loadingUser) return <p>Ladataan käyttäjää...</p>;
-    if (!user) return <LoginForm />;
+    if (!user) {
+      return (
+        <div>
+          <ConsentBanner />
+          <RouteAnalytics />
+
+          <LoginForm />
+
+          <button onClick={() => setShowAnalyticsInfo(true)}>
+            📊 Analytics info
+          </button>
+        </div>
+      );
+    }
     if (!session) return <p>⚠️ Session ei latautunut</p>;
 
   const currentPlayer = session.players?.find(p => p.uid === user.uid);
   const hasGuessed = currentPlayer?.guess != null;
 
-  if (showAnalyticsInfo) {
-    return (
-      <div>
-        <button onClick={() => setShowAnalyticsInfo(false)}>
-          Takaisin
-        </button>
-
-        <h2>Analytiikan hyödyntäminen</h2>
-
-        <p>
-        Web-analytiikkaa voidaan käyttää sovelluksen käytön seurantaan ja parantamiseen. 
-        Se kertoo, kuinka paljon käyttäjää vierailee sovelluksessa, mitä ominaisuuksia he käyttävät 
-        ja kuinka kauan he viipyvät sivulla. Näiden tietojen perusteella voidaan parantaa 
-        käyttökokemusta ja tunnistaa ongelmia.
-
-        CORS-ongelma ilmenee, kun selain estää eri domainien väliset pyynnöt turvallisuussyistä. 
-        Tämä voidaan välttää käyttämällä samaa domainia tai sallimalla pyynnöt palvelimen 
-        asetuksissa (Access-Control-Allow-Origin).
-        </p>
-      </div>
-    );
-  }
   return (
     <div>
       <ConsentBanner />
