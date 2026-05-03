@@ -16,13 +16,15 @@ import { startGame, nextRound } from './gameController';
 
 import ConsentBanner from "./components/ConsentBanner";
 
+import RouteAnalytics from './components/RouteAnalytics';
+
 function App() {
   
   const [session, setSession] = useState<Session | null>(null);
   const [codename, setCodename] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
-
+  const [showAnalyticsInfo, setShowAnalyticsInfo] = useState(false);
   const sessionId = "pWQ8TndPALsYnoIIPahC";
 
   useEffect(() => {
@@ -110,9 +112,32 @@ function App() {
   const currentPlayer = session.players?.find(p => p.uid === user.uid);
   const hasGuessed = currentPlayer?.guess != null;
 
+  if (showAnalyticsInfo) {
+    return (
+      <div>
+        <button onClick={() => setShowAnalyticsInfo(false)}>
+          Takaisin
+        </button>
+
+        <h2>Analytiikan hyödyntäminen</h2>
+
+        <p>
+        Web-analytiikkaa voidaan käyttää sovelluksen käytön seurantaan ja parantamiseen. 
+        Se kertoo, kuinka paljon käyttäjää vierailee sovelluksessa, mitä ominaisuuksia he käyttävät 
+        ja kuinka kauan he viipyvät sivulla. Näiden tietojen perusteella voidaan parantaa 
+        käyttökokemusta ja tunnistaa ongelmia.
+
+        CORS-ongelma ilmenee, kun selain estää eri domainien väliset pyynnöt turvallisuussyistä. 
+        Tämä voidaan välttää käyttämällä samaa domainia tai sallimalla pyynnöt palvelimen 
+        asetuksissa (Access-Control-Allow-Origin).
+        </p>
+      </div>
+    );
+  }
   return (
     <div>
       <ConsentBanner />
+      <RouteAnalytics />
 
       <p>👋 Tervetuloa, {codename}</p>
       <button onClick={logout}>Kirjaudu ulos</button>
@@ -142,6 +167,10 @@ function App() {
         </button>
         </>
       )}
+
+      <button onClick={() => setShowAnalyticsInfo(true)}>
+        📊 Analytics info
+      </button>
     </div>
   );
 }
