@@ -113,16 +113,25 @@ function App() {
 
           <h2>Analytiikan hyödyntäminen</h2>
 
-          <p>
-          Web-analytiikkaa voidaan käyttää sovelluksen käytön seurantaan ja parantamiseen. 
-          Se kertoo, kuinka paljon käyttäjää vierailee sovelluksessa, mitä ominaisuuksia he käyttävät 
-          ja kuinka kauan he viipyvät sivulla. Näiden tietojen perusteella voidaan parantaa 
-          käyttökokemusta ja tunnistaa ongelmia.
-
-          CORS-ongelma ilmenee, kun selain estää eri domainien väliset pyynnöt turvallisuussyistä. 
-          Tämä voidaan välttää käyttämällä samaa domainia tai sallimalla pyynnöt palvelimen 
-          asetuksissa (Access-Control-Allow-Origin).
+          <p className="space">
+          Web-analytiikka tarkoittaa käytännössä sitä, että seurataan ja analysoidaan,
+          miten käyttäjät toimivat verkkosivustolla tai sovelluksessa. Siihen kuuluu datan kerääminen, 
+          tarkastelu ja raportointi siitä, miten käyttäjät käyttävät sivuston eri osia, kuten sivuja, kuvia ja videoita. 
+          Tavoitteena on saada selkeä kuva siitä, mikä toimii ja mikä ei. Näiden tietojen avulla sivustoa voidaan kehittää 
+          paremmin käyttäjien tarpeisiin sopivaksi, mutta samalla myös tukea liiketoimintaa. Esimerkiksi kasvattamalla kävijämääriä, myyntiä tai liikevaihtoa.
           </p>
+
+          <p className="space">
+          Analytiikka voi kertoa monia hyödyllisiä asioita, kuten mistä käyttäjät tulevat sivustolle, mitä sivuja he katsovat, kuinka kauan he viipyvät ja missä kohtaa he poistuvat. 
+          Lisäksi voidaan nähdä, ketkä ovat uusia kävijöitä ja ketkä palaavat takaisin. Näiden tietojen avulla on helpompi ymmärtää käyttäjien käyttäytymistä ja sitä, 
+          millainen sisältö tai ominaisuudet kiinnostavat eniten. 
+          </p>
+          <p className="space">
+          On myös tärkeää ymmärtää, että analytiikka ei ole pelkkää datan keräämistä. 
+          Siihen kuuluu myös tavoitteiden asettaminen, tärkeiden mittareiden (KPI) valinta ja datan hyödyntäminen. Esimerkiksi A/B-testauksen avulla voidaan vertailla kahta eri versiota ja katsoa, 
+          kumpi toimii paremmin. Tämän kaiken avulla voidaan tehdä parempia päätöksiä liittyen sisältöön, markkinointiin ja koko sivuston toimivuuteen.
+          </p>
+
         </div>
       );
     }
